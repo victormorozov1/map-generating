@@ -14,10 +14,18 @@ class Color:
         return f'Color({self.r}, {self.g}, {self.b})'
 
     def __add__(self, other):
-        return Color(self.r + other.r, self.g + other.g, self.b + other.b)
+        if isinstance(other, Color):
+            return Color(self.r + other.r, self.g + other.g, self.b + other.b)
+        elif isinstance(other, tuple):
+            return Color(self.r + other[0], self.g + other[1], self.b + other[2])
+        return Color(self.r + other, self.g + other, self.b + other)
 
     def __sub__(self, other):
-        return Color(self.r - other.r, self.g - other.g, self.b - other.b)
+        if isinstance(other, Color):
+            return Color(self.r - other.r, self.g - other.g, self.b - other.b)
+        elif isinstance(other, tuple):
+            return Color(self.r - other[0], self.g - other[1], self.b - other[2])
+        return Color(self.r - other, self.g - other, self.b - other)
 
     def __mul__(self, other):
         return Color(self.r * other, self.g * other, self.b * other)

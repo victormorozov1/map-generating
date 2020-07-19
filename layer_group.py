@@ -14,7 +14,9 @@ class LayerGroup:
         for i in range(n):
             self.layers.append(Layer(sz, layer_n + 1, start_color_range))
             layer_n *= 2
+            start_color_range -= 1
             start_color_range //= 2
+            start_color_range += 1
 
     def show(self):
         if not self.win:
@@ -37,6 +39,6 @@ if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((1000, 1000))
 
-    layer_group = LayerGroup(4, 512, win=win)
+    layer_group = LayerGroup(8, 512, start_color_range=Color(128, 128, 10), win=win)
     layer_group.show()
     input()
