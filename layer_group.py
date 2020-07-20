@@ -30,12 +30,7 @@ class LayerGroup:
             layer_n *= 2
 
     def count_color(self, i, j):
-        val = 0
-
-        for layer in self.layers:
-            val += layer.pixels(i, j)
-
-        c = val / self.start_range * 255
+        c = self[i, j] / self.start_range * 255
         return Color(c, c, c)
 
     def show(self):
@@ -53,6 +48,9 @@ class LayerGroup:
                 pygame.draw.rect(self.win, color, [i, j, 1, 1])
 
         pygame.display.update()
+
+    def __getitem__(self, item):
+        return sum([layer[item] for layer in self.layers])
 
 
 class ColorLayerGroup(LayerGroup):

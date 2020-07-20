@@ -63,6 +63,9 @@ class Layer:
 
         pygame.display.update()
 
+    def __getitem__(self, item):
+        return self.pixels(*item)
+
 
 class ColorLayer(Layer):
     def new_random_item(self):
@@ -87,8 +90,8 @@ if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((1000, 1000))
 
-    layer = ColorLayer(512, 17, (255, 255, 255), win)
-    layer.show()
+    layer = ColorLayer(8, 17, (255, 255, 255), win)
+    print(layer[3, 4])
     input()
 
 
