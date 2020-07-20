@@ -3,11 +3,13 @@ import pygame
 from random import randrange as rd
 
 
+
+
 class Layer:
-    def __init__(self, sz, n, color_range, win=None):
+    def __init__(self, sz, n, range, win=None):
         self.sz = sz
         self.n = n
-        self.color_range = color_range
+        self.range = range
         self.win = win
 
         self.cell_sz = self.sz // (n - 1)
@@ -16,11 +18,14 @@ class Layer:
         self.create_arr()
         print(f'cell_sz = {self.cell_sz}')
 
+    def new_random_item(self):
+        return rd(0, self.range)
+
     def create_arr(self):
         for i in range(self.n):
             self.arr.append([])
             for j in range(self.n):
-                self.arr[-1].append(Color(color_range=self.color_range))
+                self.arr[-1].append(self.new_random_item())
 
     def parabola(self, x):
         return x ** 2 * (0.5 / 0.25)
@@ -48,6 +53,29 @@ class Layer:
             print('Error, no window to show layer')
             return False
 
+        maxx = 0
+        for i in range(self.n):
+            for j in range(self.n):
+                maxx = max(maxx, self.arr[i][j])
+
+        for i in range(self.sz):
+            print(i)
+            for j in range(self.sz):
+                color = 255 * self.pixels(i, j) / maxx
+                pygame.draw.rect(self.win, (color, color, color), [i, j, 1, 1])
+
+        pygame.display.update()
+
+
+class ColorLayer(Layer):
+    def new_random_item(self):
+        return Color(color_range=self.range)
+
+    def show(self):
+        if not self.win:
+            print('Error, no window to show layer')
+            return False
+
         for i in range(self.sz):
             for j in range(self.sz):
                 pygame.draw.rect(self.win, self.pixels(i, j).tuple(), [i, j, 1, 1])
@@ -59,7 +87,7 @@ if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((1000, 1000))
 
-    layer = Layer(512, 17, (100, 100, 100), win)
+    layer = ColorLayer(512, 17, (255, 255, 255), win)
     layer.show()
     input()
 
