@@ -59,6 +59,13 @@ class Color:
     def __imul__(self, other):
         return self * other
 
+    def __lt__(self, other):
+        if isinstance(other, Color):
+            return self.r < other.r and self.g < other.g and self.b < other.b
+        elif isinstance(other, tuple):
+            return self.r < other[0] and self.g < other[1] and self.b < other[2]
+        return self.r < other and self.g < other and self.b < other
+
     def tuple(self):
         return self.r, self.g, self.b
 
@@ -66,5 +73,4 @@ class Color:
 if __name__ == '__main__':
     c1 = Color(20, 30, 57)
     c2 = Color(10, 20, 1)
-    c1 //= c2.tuple()
-    print(c1, c2)
+    print(c1 < 12)

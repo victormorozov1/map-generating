@@ -48,21 +48,18 @@ class Layer:
 
         return self.f(val_up, val_down, i % self.cell_sz / self.cell_sz)
 
+    def color(self, i, j):
+        color = self.pixels(i, j) / self.range * 255
+        return Color(color, color, color)
+
     def show(self):
         if not self.win:
             print('Error, no window to show layer')
             return False
 
-        maxx = 0
-        for i in range(self.n):
-            for j in range(self.n):
-                maxx = max(maxx, self.arr[i][j])
-
         for i in range(self.sz):
-            print(i)
             for j in range(self.sz):
-                color = 255 * self.pixels(i, j) / maxx
-                pygame.draw.rect(self.win, (color, color, color), [i, j, 1, 1])
+                pygame.draw.rect(self.win, self.color(i, j), [i, j, 1, 1])
 
         pygame.display.update()
 
@@ -70,6 +67,9 @@ class Layer:
 class ColorLayer(Layer):
     def new_random_item(self):
         return Color(color_range=self.range)
+
+    def color(self, i, j):
+        return self.pixels(i, j)
 
     def show(self):
         if not self.win:
