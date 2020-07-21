@@ -5,48 +5,64 @@ from layer_group import LayerGroup
 
 
 class Map:
-    def __init__(self, sz, range=100000, water_level=50000, snow_level=80000):
+    def __init__(self, sz, range=100000, water_level=50000, snow_level=100000, make_clouds=True):
         self.sz = sz
         self.range = range
         self.water_level = water_level
         self.snow_level = snow_level
+        self.make_clouds = make_clouds
 
         self.landscape = LayerGroup(22, sz, range)
-        self.clouds = LayerGroup(22, sz, range)
+        if self.make_clouds:
+            self.clouds = LayerGroup(22, sz, range)
+
+        self.im = Image.new('RGBA', (self.sz, self.sz), 'black')
+        self.pixels = self.im.load()
+        self.height = []
+        self.count_pixels()
 
     def show(self):
-        im = Image.new('RGBA', (self.sz, self.sz), 'black')
-        pixels = im.load()
+        self.im.show()
 
+    def count_pixels(self):
         for i in range(self.sz):
             print(i / self.sz * 100, '%')
+            self.height.append([])
             for j in range(self.sz):
                 h = self.landscape[i, j]
+                self.height[-1].append(h)
                 global color
                 if h < self.water_level:  # Water
                     color = Color(0, 0, h / 2 * 1000 / self.range)
                 elif h < self.snow_level:
                     color = Color(h * 100 / self.range, h / 4 * 1000 / self.range, h / 30 * 1000 / self.range)
                 else:
-                    c = h / 8 * 1000 / self.range + 128
+                    c = 1000
                     color = Color(c, c, c)
-                color *= 0.2
+
+                if self.make_clouds:
+                    color *= 0.2
+                else:
+                    color *= 0.4
 
                 # Clouds
-                h = (self.clouds[i, j] / self.range) ** 3 * self.range
-                color = (color + Color(h / 4 * 1000 / self.range, h / 4 * 1000 / self.range, h / 4 * 1000 / self.range) * 0.8).tuple()
-                pixels[i, j] = int(color[0]), int(color[1]), int(color[2])
+                if self.make_clouds:
+                    h = (self.clouds[i, j] / self.range) ** 3 * self.range
+                    color = (color + Color(h / 4 * 1000 / self.range, h / 4 * 1000 / self.range, h / 4 * 1000 / self.range) * 0.8)
 
-        im.show()
+                self.pixels[i, j] = int(color.r), int(color.g), int(color.b)
 
         arr = [int(filename.split('_')[0]) for filename in filter(lambda name: '_' in name, os.listdir('map_results'))]
         n = 1
         if arr:
             n += max(arr)
-        im.save(f'map_results/{n}_map.png')
+        self.im.save(f'map_results/{n}_map.png')
+
+    def __getitem__(self, item):
+        return self.height[item[0]][item[1]]
 
 
 if __name__ == '__main__':
-    map = Map(2048)
-    map.show()
+    map = Map(256, make_clouds=False)
+    print(map[10, 11])
     input()

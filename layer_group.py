@@ -4,7 +4,7 @@ from layer import Layer, ColorLayer
 
 
 class LayerGroup:
-    def __init__(self, n, sz, start_range, win=None, layer_class=Layer):
+    def __init__(self, n, sz, start_range, win=None, layer_class=Layer, start_n=4):
         self.n = n
         self.sz = sz
         self.layers = []
@@ -12,7 +12,7 @@ class LayerGroup:
         self.start_range = start_range
         self.layer_class = layer_class
 
-        layer_n = 4
+        layer_n = start_n
         for i in range(n):
             start_range = (start_range - 1) // 2 + 1
             if start_range < 2:
