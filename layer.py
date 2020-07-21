@@ -3,29 +3,32 @@ import pygame
 from random import randrange as rd
 
 
-
-
 class Layer:
-    def __init__(self, sz, n, range, win=None):
+    def __init__(self, sz, n, range, win=None, border=None):
         self.sz = sz
         self.n = n
         self.range = range
         self.win = win
+        self.border = border
 
         self.cell_sz = self.sz // (n - 1)
 
         self.arr = []
         self.create_arr()
         print(f'cell_sz = {self.cell_sz}')
+        print(f'self.border={self.border}')
 
-    def new_random_item(self):
-        return rd(0, self.range)
+    def new_random_item(self, range=None):
+        return rd(0, range if range else self.range)
 
     def create_arr(self):
         for i in range(self.n):
             self.arr.append([])
             for j in range(self.n):
-                self.arr[-1].append(self.new_random_item())
+                if self.border and i * j * (i - self.n + 1) * (j - self.n + 1) == 0:
+                    self.arr[-1].append(self.new_random_item(range=self.border))
+                else:
+                    self.arr[-1].append(self.new_random_item())
 
     def parabola(self, x):
         return x ** 2 * (0.5 / 0.25)
@@ -65,6 +68,9 @@ class Layer:
 
     def __getitem__(self, item):
         return self.pixels(*item)
+
+    def __setitem__(self, key, value):
+        self.arr[key[0]][key[1]] = value
 
 
 class ColorLayer(Layer):

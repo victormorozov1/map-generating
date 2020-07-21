@@ -5,14 +5,14 @@ from layer_group import LayerGroup
 
 
 class Map:
-    def __init__(self, sz, range=100000, water_level=50000, snow_level=100000, make_clouds=True):
+    def __init__(self, sz, range=100000, water_level=50000, snow_level=100000, make_clouds=True, water_around=True):
         self.sz = sz
         self.range = range
         self.water_level = water_level
         self.snow_level = snow_level
         self.make_clouds = make_clouds
 
-        self.landscape = LayerGroup(22, sz, range)
+        self.landscape = LayerGroup(22, sz, range, border_lower=water_level if water_around else None)
         if self.make_clouds:
             self.clouds = LayerGroup(22, sz, range)
 
@@ -63,6 +63,6 @@ class Map:
 
 
 if __name__ == '__main__':
-    map = Map(256, make_clouds=False)
-    print(map[10, 11])
+    map = Map(1024, make_clouds=False, water_around=True, water_level=10000)
+    map.show()
     input()
