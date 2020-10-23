@@ -63,6 +63,6 @@ class Map:
 
 
 if __name__ == '__main__':
-    map = Map(1024, make_clouds=False, water_around=True, water_level=10000)
+    map = Map(256, make_clouds=False, water_around=True)
     map.show()
-    input()
+
