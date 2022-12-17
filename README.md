@@ -5,7 +5,7 @@ This code can generate a random map.
 ```
 git clone https://github.com/victormorozov1/map-generating.git
 cd map-generating
-python map.py
+python main.py
 ```
 
 ## Examples
