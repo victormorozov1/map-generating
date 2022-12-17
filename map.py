@@ -1,8 +1,8 @@
 import os
-from PIL import Image, ImageDraw
+from PIL import Image
 from color_class import Color
 from layer_group import LayerGroup
-import argparse
+
 
 class Map:
     def __init__(self, sz, range=100000, water_level=50000, snow_level=100000, make_clouds=True, water_around=True):
@@ -60,23 +60,3 @@ class Map:
 
     def __getitem__(self, item):
         return self.height[item[0]][item[1]]
-
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--size', type=int, default=256)
-    parser.add_argument('-c', '--clouds', action='store_true')
-    parser.add_argument('-nw', '--no_water_around', action='store_true')
-    args = parser.parse_args()
-    return args
-
-
-def main():
-    args = parse_args()
-    map = Map(args.size, make_clouds=args.clouds, water_around=(args.no_water_around + 1) % 2)
-    map.show()
-
-
-if __name__ == '__main__':
-    main()
-
