@@ -15,7 +15,7 @@ Possible command line args:
 
 ## Examples
 ```cmd
-python main.py -s=80192
+python main.py -s=8192
 ```
 ![alt text](/map_results/50_map.png)
 ---
